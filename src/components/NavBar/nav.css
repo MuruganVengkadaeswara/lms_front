@@ -1,0 +1,38 @@
+#brandlogo{
+    height: 50px;
+    width: 50px;
+    /* padding: 10px; */
+    font-size: xx-large !important ;
+}
+
+.subt{
+    font-size: small;
+    font-style: italic;
+    color: #04471C !important;
+
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.maint{
+    font-size: 25pt;
+    color: #04471C !important;
+    /* margin-left: 20px; */
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.nbar{
+   background-color: #5FBB97;
+   color: #04471C !important;
+   position: absolute;
+
+}
+
+.loginbtn:hover{
+    color: #04471C !important;
+    background-color: #5FBB97 !important;
+
+}
+
+#brandlogo{
+    height: 80px;
+}
