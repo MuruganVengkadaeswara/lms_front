@@ -8,7 +8,7 @@ import "./nav.css";
 function NavBar() {
   const [log, setLog] = useState(1);
   let ele;
-  if (log) {
+  if (localStorage.getItem('user') == null) {
     ele = (
       <NavLink to="/Login">
         <Button

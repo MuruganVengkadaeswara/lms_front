@@ -1,22 +1,47 @@
 import React, { useState } from "react";
-import { Form, Button } from "react-bootstrap";
+import { Form, Button,Alert, Spinner } from "react-bootstrap";
 import axios from "axios";
+import '../LoanType/addloan.css'
 
 const AddLoanType = (props) => {
   const [type, setType] = useState({});
+  const [alert,setAlert] = useState()
 
   const addtype = () => {
     console.log(type);
+    setAlert(<Spinner animation="border" variant="success"/>)
     axios.post('http://localhost:8080/lms/employee/loantype',type).
     then(res=>{
         console.log(res);
-        console.log(res.data);
+        console.log(res.data.error);
+        if(res.data.error){
+          setAlert((<Alert variant="danger">
+              unable to add loan type
+            </Alert>))
+        }
+        else{
+          setAlert((
+            <Alert variant="success">
+              Loan Type Added SuccessFully
+            </Alert>
+          ))
+          document.loantypeform.reset()
+        }
+        
     })
   };
 
   return (
-    <div className="col-md-4 offset-md-4 card card-body mt-5">
-      <Form>
+    <div className="col-md-4 offset-md-4 card card-body mt-5 addloanblk">
+      <Form name="loantypeform">
+        <h2>
+          <strong>
+            Loan Type Details
+          </strong>
+        </h2>
+        <hr></hr>
+        {alert}
+        <hr></hr>
         <Form.Group>
           <Form.Label>Loan Name</Form.Label>
           <Form.Control
@@ -54,7 +79,7 @@ const AddLoanType = (props) => {
           ></Form.Control>
         </Form.Group>
       </Form>
-      <Button onClick={addtype}>Add</Button>
+      <Button variant="success" className="col-md-4 offset-md-4" onClick={addtype}>Add</Button>
     </div>
   );
 };

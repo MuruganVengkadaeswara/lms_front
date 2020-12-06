@@ -20,6 +20,7 @@ function App() {
           <AppProvider>
             {/* <Route exact path='/' component={Home}></Route> */}
             <Home/>
+            {/* <AddClient/> */}
             {/* <EmployeeDashboard/> */}
             {/* <AdminDashboard/> */}
             {/* <EmployeeDashboard/> */}

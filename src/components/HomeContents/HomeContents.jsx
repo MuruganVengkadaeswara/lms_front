@@ -1,13 +1,17 @@
-import React from 'react';
-import '../HomeContents/homecontents.css'
-import {Jumbotron,Container} from 'react-bootstrap'
-import CarouselComp from '../Carousel/CarouselComp'
+import React from "react";
+import "../HomeContents/homecontents.css";
+import { Jumbotron, Container,NavLink,Button,Nav} from "react-bootstrap";
+import CarouselComp from "../Carousel/CarouselComp";
 
-
-const HomeContents = (props)=>{
-    return(
-        <div>
-             <div className="col-md-10 offset-md-1  jmbo">
+const HomeContents = (props) => {
+  return (
+    <div>
+      <NavLink href="/apply">
+        <Button variant="outline-light" className="applbtn">
+          Apply
+        </Button>
+      </NavLink>
+      <div className="col-md-10 offset-md-1  jmbo">
         <Jumbotron fluid>
           <Container className="jmboctr">
             <h1 className="jmbttl">
@@ -28,21 +32,16 @@ const HomeContents = (props)=>{
             </div>
           </Container>
           <Container>
-            <div className='jmbpara'>
-                  Your financial friend.
-            </div>
+            <div className="jmbpara">Your financial friend.</div>
           </Container>
         </Jumbotron>
       </div>
       <div className="caro offset-md-2 col-md-8 mt-5">
         <CarouselComp />
       </div>
-      <div>
-       
-      </div>
-        </div>
-    )
-}
-
+      <div></div>
+    </div>
+  );
+};
 
 export default HomeContents;

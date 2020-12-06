@@ -3,23 +3,43 @@ import { Form, Button } from "react-bootstrap";
 import usericon from "./icons/user.svg";
 import passicon from "./icons/password.svg";
 import "./login.css";
-import { NavLink, BrowserRouter as Router, Route } from "react-router-dom";
+import {
+  NavLink,
+  BrowserRouter as Router,
+  Route,
+  withRouter,
+} from "react-router-dom";
 import Register from "../Register/Register";
-import axios from 'axios'
+import axios from "axios";
 function Login(props) {
-
-  const [creds,setCreds] = useState({
-    userEmail:"",
-    password:""
+  const [creds, setCreds] = useState({
+    userEmail: "",
+    password: "",
   });
 
-  const getcreds = ()=>{
+  const getcreds = () => {
     console.log(creds);
-    axios.post('http://localhost:8080/lms/user/login',creds).then(res=>{
+    axios.post("http://localhost:8080/lms/user/login", creds).then((res) => {
       console.log(res);
       console.log(res.data);
-    })
-  }
+      if (!res.data.error) {
+        localStorage.setItem("user", JSON.stringify(res.data.response));
+        switch (res.data.response.roleId) {
+          case 1:
+            props.history.push("/admin");
+            break;
+          case 2:
+            props.history.push("/employee");
+            break;
+          case 3:
+            props.history.push("/client");
+            break;
+          default:
+            props.history.push("/Login");
+        }
+      }
+    });
+  };
 
   return (
     <div className="card card-body col-md-4 offset-md-4  loginbody">
@@ -31,12 +51,16 @@ function Login(props) {
             </span>
             UserName
           </Form.Label>
-          <Form.Control type="email" placeholder="Enter email or username" onChange={e=>{
-            const val = e.target.value;
-            setCreds(prevState=>{
-              return {...prevState,userEmail:val}
-            })
-          }}/>
+          <Form.Control
+            type="email"
+            placeholder="Enter email or username"
+            onChange={(e) => {
+              const val = e.target.value;
+              setCreds((prevState) => {
+                return { ...prevState, userEmail: val };
+              });
+            }}
+          />
           <Form.Text className="text-muted"></Form.Text>
         </Form.Group>
 
@@ -47,22 +71,26 @@ function Login(props) {
             </span>
             Password
           </Form.Label>
-          <Form.Control type="password" placeholder="Password" onChange={e=>{
-            const val = e.target.value;
-            setCreds(prevState=>{
-              return {...prevState,password:val}
-            })
-          }}/>
+          <Form.Control
+            type="password"
+            placeholder="Password"
+            onChange={(e) => {
+              const val = e.target.value;
+              setCreds((prevState) => {
+                return { ...prevState, password: val };
+              });
+            }}
+          />
         </Form.Group>
         {/* <NavLink to="/admin"> */}
-          <Button onClick={getcreds} variant="primary" className="offset-5">
-            Login
-          </Button>
+        <Button onClick={getcreds} variant="success" className="offset-5">
+          <strong>Login</strong>
+        </Button>
         {/* </NavLink> */}
       </Form>
-      <NavLink to="/register">Register</NavLink>
+      <NavLink to="/register">New User? Register Here</NavLink>
     </div>
   );
 }
 
-export default Login;
+export default withRouter(Login);

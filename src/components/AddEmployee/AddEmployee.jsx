@@ -1,24 +1,41 @@
 import React, { useState } from "react";
-import { Form, Col, Button } from "react-bootstrap";
+import { Form, Col, Button, Alert, Spinner } from "react-bootstrap";
 import deptlist from "../AddEmployee/deptlist.json";
 import axios from "axios";
+import "../AddEmployee/addemp.css";
 
 const AddEmployee = (props) => {
   const [employee, setEmp] = useState({});
-
+  const [alert, setAlert] = useState();
   const addemp = () => {
     console.log(employee);
+    setAlert(<Spinner animation="border" variant="success" />);
     axios
       .post("http://localhost:8080/lms/admin/employee", employee)
       .then((res) => {
         console.log(res);
         console.log(res.data);
+        if (res.data.error) {
+          setAlert(<Alert variant="danger">unable to add employee</Alert>);
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        } else {
+          setAlert(
+            <Alert variant="success">Employee added successfully</Alert>
+          );
+          document.empform.reset();
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
       });
   };
 
   return (
-    <div className="card card-body col-md-4 offset-md-4 mt-5">
-      <Form>
+    <div className="card card-body col-md-6 offset-md-3 mt-5 addemp">
+      {alert}
+      <h2>
+        <strong>Employee Details</strong>
+      </h2>
+      <hr></hr>
+      <Form name="empform">
         <Form.Group>
           <Form.Row>
             <Col>
@@ -114,7 +131,9 @@ const AddEmployee = (props) => {
             </option>
           </Form.Control>
         </Form.Group>
-        <Button onClick={addemp}>Add Employee</Button>
+        <Button variant="success" className="offset-md-5" onClick={addemp}>
+          <strong>Add Employee</strong>
+        </Button>
       </Form>
     </div>
   );

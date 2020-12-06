@@ -17,6 +17,7 @@ import NavBar from "../NavBar/NavBar";
 import Register from "../Register/Register";
 import HomeContents from "../HomeContents/HomeContents";
 import "../Home/home.css";
+import EmployeeDashboard from "../EmployeeDashboard/EmployeeDashboard";
 
 const navs = [
   {
@@ -39,26 +40,16 @@ const navs = [
 
 const Home = (props) => {
   const [appl, setAppl] = useState(1);
-  let ele;
-  if (1) {
-    ele = (
-      <NavLink to="/apply">
-        <Button variant="outline-light" className="applbtn">
-          Apply
-        </Button>
-      </NavLink>
-    );
-  }
-
   return (
     <div>
       <Router>
         <NavBar />
-        {ele}
+        {/* {ele} */}
         {/* <Switch> */}
           <Route exact path="/" component={HomeContents}></Route>
           <Route path="/login" component={Login}></Route>
           <Route path="/apply" component={LoanApplication}></Route>
+          <Route path="/employee" component={EmployeeDashboard}></Route>
           <Route path='/admin' component={AdminDashboard}></Route>
           <Route path="/register" component={Register}></Route>
         {/* </Switch> */}
