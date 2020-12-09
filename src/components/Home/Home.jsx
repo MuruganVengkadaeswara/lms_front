@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Jumbotron, Container } from "react-bootstrap";
 import {
   BrowserRouter as Router,
@@ -7,6 +7,7 @@ import {
   Link,
   NavLink,
   Redirect,
+  withRouter,
 } from "react-router-dom";
 import AddEmployee from "../AddEmployee/AddEmployee";
 import AdminDashboard from "../AdminDashboard/AdminDashboard";
@@ -18,40 +19,126 @@ import Register from "../Register/Register";
 import HomeContents from "../HomeContents/HomeContents";
 import "../Home/home.css";
 import EmployeeDashboard from "../EmployeeDashboard/EmployeeDashboard";
-
-const navs = [
-  {
-    url: "/addemp",
-    name: "Add employee",
-  },
-  {
-    url: "/deleteEmp",
-    name: "Delete employee",
-  },
-  {
-    url: "/addRole",
-    name: "Add Role",
-  },
-  {
-    url: "/updateRole",
-    name: "Update Role",
-  },
-];
+import NotLoggedIn from "../NotLoggedIn/NotLoggedIn";
+import ClientDashBoard from "../ClientDashBoard/ClientDashBoard";
+import AdminContents from "../AdminDashboard/AdminContents/AdminContents";
+import CheckStatus from "../CheckStatus/CheckStatus";
 
 const Home = (props) => {
   const [appl, setAppl] = useState(1);
+  const [navcontent, setnavcontent] = useState([]);
+  const [dash, setdash] = useState(<HomeContents />);
+
+  let loggedin;
+  let roleId;
+  if (localStorage.getItem("user") != null) {
+    loggedin = true;
+    roleId = JSON.parse(localStorage.getItem("user")).roleId;
+  } else {
+    loggedin = false;
+  }
+
+  useEffect(() => {
+    // console.log(JSON.parse(localStorage.getItem("user")).roleId);
+
+    switch (roleId) {
+      case null:
+        setnavcontent([]);
+        break;
+
+      case 1:
+        setnavcontent([
+          {
+            url: "/admin/addemp",
+            name: "Add employee",
+          },
+          {
+            url: "/admin/updateEmp",
+            name: "Update employee",
+          },
+          {
+            url: "/admin/addRole",
+            name: "Add Role",
+          },
+          {
+            url: "/admin/updateRole",
+            name: "Update Role",
+          },
+        ]);
+        setdash(<Redirect to="/admin" />);
+        break;
+      case 2:
+        setnavcontent([
+          {
+            url: "/employee/pendLoans",
+            name: "Pending Applications",
+          },
+          {
+            url: "/employee/apprLoans",
+            name: "Approved Applications",
+          },
+          {
+            url: "/employee/addclient",
+            name: "Add Client",
+          },
+          {
+            url: "/employee/updateclient",
+            name: "Update Client",
+          },
+          {
+            url: "/employee/addloantype",
+            name: "Add Loan Type",
+          },
+          {
+            url: "/employee/updateloantype",
+            name: "Update Loan type",
+          },
+          {
+            url: "/employee/clients",
+            name: "All clients",
+          },
+        ]);
+        setdash(<Redirect to="/employee" />);
+        break;
+      case 3:
+        setnavcontent([
+          {
+            url: "/client/loans",
+            name: "My Loans",
+          },
+          {
+            url: "/client/pendingemis",
+            name: "Pending Emis",
+          },
+          {
+            url: "/client/apply",
+            name: "Apply for loan",
+          },
+        ]);
+        setdash(<Redirect to="/client"/>);
+        break;
+    }
+  }, []);
+
   return (
     <div>
       <Router>
-        <NavBar />
+        <NavBar navs={navcontent} />
         {/* {ele} */}
         {/* <Switch> */}
-          <Route exact path="/" component={HomeContents}></Route>
-          <Route path="/login" component={Login}></Route>
-          <Route path="/apply" component={LoanApplication}></Route>
-          <Route path="/employee" component={EmployeeDashboard}></Route>
-          <Route path='/admin' component={AdminDashboard}></Route>
-          <Route path="/register" component={Register}></Route>
+        <Route exact path="/">
+          {/* {loggedin ? <Redirect to="/admin" /> : <HomeContents />} */}
+          {dash}
+        </Route>
+        <Route path="/login" component={Login}></Route>
+        <Route path="/apply" component={LoanApplication}></Route>
+        <Route path="/employee" component={EmployeeDashboard}></Route>
+        <Route path="/admin" component={AdminDashboard}></Route>
+        <Route path="/register" component={Register}></Route>
+        <Route path="/pleaselogin" component={NotLoggedIn}></Route>
+        <Route path="/client" component={ClientDashBoard}></Route>
+        <Route path="/applicationstatus" component={CheckStatus}></Route>
+
         {/* </Switch> */}
       </Router>
     </div>

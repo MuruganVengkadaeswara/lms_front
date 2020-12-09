@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Form, Col, Button, Spinner, Alert } from "react-bootstrap";
 import statelist from "../AddClient/statelist.json";
 import axios from "axios";
+import '../AddClient/addclient.css'
 
 const AddClient = (props) => {
   const [client, setClient] = useState({});

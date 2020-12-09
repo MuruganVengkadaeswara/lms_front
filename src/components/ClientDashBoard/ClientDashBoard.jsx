@@ -1,31 +1,42 @@
-import React from "react";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Link,
+  withRouter,
+} from "react-router-dom";
 import SideNavBar from "../SideNavBar/SideNavBar";
-
-const navs = [
-  {
-    url: "/client/loans",
-    name: "My Loans",
-  },
-  {
-    url: "/client/pendingemis",
-    name: "Pending Emis",
-  },
-  {
-    url: "/client/apply",
-    name: "Apply for loan",
-  },
-];
+import '../ClientDashBoard/clientdb.css'
+import icon from '../ClientDashBoard/clients.svg'
 
 const ClientDashBoard = (props) => {
+  const [user, setUser] = useState(localStorage.getItem("user"));
+  const [username, setusername] = useState();
+
+  useEffect(() => {
+    console.log("useeffect admin");
+    console.log(user);
+    if (user == null) {
+      props.history.push("/pleaselogin");
+    } else if (JSON.parse(user).roleId != 3) {
+      props.history.push("/pleaselogin");
+    } else {
+      let un = JSON.parse(localStorage.getItem("user")).userName;
+      setusername(un);
+    }
+  }, []);
+
   return (
     <div>
-      <Router>
-        <SideNavBar navs={navs} />
-        <Route></Route>
-      </Router>
+      <div className="offset-md-8 wlcmtxt mt-5">
+        Welcome {username}
+        <img src={icon} className="icon"></img>
+      </div>
+      {/* <Router> */}
+      <Route></Route>
+      {/* </Router> */}
     </div>
   );
 };
 
-export default ClientDashBoard;
+export default withRouter(ClientDashBoard);

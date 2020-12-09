@@ -47,23 +47,23 @@ const UpdateRole = (props) => {
       console.log(obj);
       setuprole(obj);
       console.log(uprole);
-      // axios.put('http://localhost:8080/lms/admin/manage-roles',obj)
-      // .then((res)=>{
-      //   console.log(res.data);
-      //   if(res.data.error){
-      //     setAlert(<Alert variant="danger">Unable to update Role</Alert>)
-      //   }
-      //   else{
-      //     setAlert(<Alert variant="success">Role updated successfully</Alert>)
-      //   }
-      // })
+      axios.put('http://localhost:8080/lms/admin/manage-roles',obj)
+      .then((res)=>{
+        console.log(res.data);
+        if(res.data.error){
+          setAlert(<Alert variant="danger">Unable to update Role</Alert>)
+        }
+        else{
+          setAlert(<Alert variant="success">Role updated successfully</Alert>)
+        }
+      })
     }
   };
 
   return (
     <div className="col-md-6 mt-5 offset-md-3 card card-body updblock">
       {alert}
-      <Table striped bordered hover>
+      <Table striped bordered hover responsive>
         <thead>
           <tr>
             <th style={{ display: "none" }}>Rid</th>

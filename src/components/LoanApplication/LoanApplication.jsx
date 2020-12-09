@@ -17,7 +17,7 @@ import "../LoanApplication/loanapplication.css";
 
 const LoanApplication = (props) => {
   const [typelist, setTypelist] = useState([]);
-  const [appln, setAppln] = useState({ status: {} });
+  const [appln, setAppln] = useState({ status: {status:"pndg"} });
   const [alert, setAlert] = useState();
 
   useEffect(() => {
@@ -115,7 +115,7 @@ const LoanApplication = (props) => {
                 onChange={(e) => {
                   const val = e.target.value;
                   setAppln((prevState) => {
-                    return { ...prevState, middlename: val };
+                    return { ...prevState, middleName: val };
                   });
                 }}
               ></Form.Control>
@@ -127,7 +127,7 @@ const LoanApplication = (props) => {
                 onChange={(e) => {
                   const val = e.target.value;
                   setAppln((prevState) => {
-                    return { ...prevState, lastname: val };
+                    return { ...prevState, lastName: val };
                   });
                 }}
               ></Form.Control>

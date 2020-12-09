@@ -63,3 +63,21 @@
       background-color: violet;
       /* margin-top: 100px; */
   }
+
+  .iconimg{
+    height: 100px;
+    height: 70%;
+
+    width: 150px;
+    overflow: hidden;
+    transition-duration: 0.9s;
+    transition-property: transform;
+    border-radius: 180px;
+  
+  }
+
+
+  /* .iconimg:hover{
+    transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+  } */

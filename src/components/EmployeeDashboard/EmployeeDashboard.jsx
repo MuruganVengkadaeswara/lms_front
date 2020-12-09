@@ -1,25 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import SideNavBar from "../SideNavBar/SideNavBar";
-import { BrowserRouter as Router, Link, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Link, Route, Switch, withRouter } from "react-router-dom";
 import AddLoanType from "../LoanType/AddLoanType";
 import UpdateLoanType from "../LoanType/UpdateLoanType";
 import AddClient from "../Employee/AddClient/AddClient";
 import ApprovedApplications from "../ApprovedApplications/ApprovedApplications";
 import ApplicationsPending from "../Employee/ApplicationsAll/ApplicationsPending";
-import DeleteClient from "../Employee/DeleteClient/DeleteClient";
 import "../EmployeeDashboard/employeedb.css";
-import icon from '../EmployeeDashboard/employee.svg'
+import icon from "../EmployeeDashboard/employee.svg";
 import UpdateClient from "../Employee/UpdateClient/UpdateClient";
 import ApplicationFull from "../Employee/ApplicationFull/ApplicationFull";
+import ClientFull from "../Employee/UpdateClient/ClientFull";
+import EmployeeHome from "./EmployeeHome/EmployeeHome";
+import ClientsAll from "../ClientsAll/ClientsAll";
 
 const navs = [
   {
-    url: "/employee/apprLoans",
-    name: "Approved Applications",
-  },
-  {
     url: "/employee/pendLoans",
     name: "Pending Applications",
+  },
+  {
+    url: "/employee/apprLoans",
+    name: "Approved Applications",
   },
   {
     url: "/employee/addclient",
@@ -28,10 +30,6 @@ const navs = [
   {
     url: "/employee/updateclient",
     name: "Update Client",
-  },
-  {
-    url: "/employee/deleteclient",
-    name: "Delete Client",
   },
   {
     url: "/employee/addloantype",
@@ -44,19 +42,35 @@ const navs = [
 ];
 
 const EmployeeDashboard = (props) => {
+  const [user, setUser] = useState(localStorage.getItem("user"));
+  const [username,setusername] = useState();
+
+  useEffect(() => {
+    console.log("useeffect admin");
+    console.log(user);
+    if (user == null) {
+      props.history.push("/pleaselogin");
+    } else if (JSON.parse(user).roleId != 2) {
+      props.history.push("/pleaselogin");
+    } else {
+      let un = JSON.parse(localStorage.getItem("user")).userName;
+      setusername(un)
+    }
+  }, []);
   return (
     <div className="empdb">
-      <Router>
-        <SideNavBar navs={navs} />
+      {/* <Router> */}
+        {/* <SideNavBar navs={navs} /> */}
         <br></br>
         <div className="offset-md-8 wlcmtxt">
-          Welcome {JSON.parse(localStorage.getItem("user")).userName}
-          <img src = {icon} className="icon"></img>
+          Welcome {username}
+          <img src={icon} className="icon"></img>
         </div>
-
-        <Route path="/employee/apprLoans" component={ApprovedApplications}>
-          {" "}
-        </Route>
+        <Route exact  path="/employee" component={EmployeeHome}></Route>
+        <Route
+          path="/employee/apprLoans"
+          component={ApprovedApplications}
+        ></Route>
         <Route
           path="/employee/pendLoans"
           component={ApplicationsPending}
@@ -66,13 +80,17 @@ const EmployeeDashboard = (props) => {
           path="/employee/updateloantype"
           component={UpdateLoanType}
         ></Route>
-        <Route path="/employee/deleteclient" component={DeleteClient}></Route>
         <Route path="/employee/addclient" component={AddClient}></Route>
         <Route path="/employee/updateclient" component={UpdateClient}></Route>
         <Route path="/employee/application" component={ApplicationFull}></Route>
-      </Router>
+        <Route
+          path="/employee/updateclient/client"
+          component={ClientFull}
+        ></Route>
+        <Route path="/employee/clients" component={ClientsAll}></Route>
+      {/* </Router> */}
     </div>
   );
 };
 
-export default EmployeeDashboard;
+export default withRouter(EmployeeDashboard);

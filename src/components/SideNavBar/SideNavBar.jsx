@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Nav, Form, FormControl, Button, Navbar } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import "../SideNavBar/sidenav.css";
+import icon from "../SideNavBar/mvicon.jpeg";
 
 class SideNavBar extends Component {
   state = {};
@@ -35,14 +36,23 @@ class SideNavBar extends Component {
   render() {
     return (
       <div>
-        <Button
+        {/* <Button
           variant="success"
           onMouseEnter={this.handleClick}
           onClick={this.handleClick}
           className='menubtn'
         >
-          Menu
-        </Button>
+        </Button> */}
+        {/* <div className="icon" 
+        onClick={this.handleClick}
+        onMouseEnter={this.handleClick}
+        >
+        </div> */}
+        <img src={icon} 
+        onClick={this.handleClick}
+        onMouseEnter={this.handleClick}
+         className="iconimg"></img>
+
         <div className={this.state.style}>
           <ul>
             {this.props.navs.map(({ url, name }) => (

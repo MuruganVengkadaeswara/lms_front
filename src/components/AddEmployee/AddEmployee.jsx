@@ -6,10 +6,15 @@ import "../AddEmployee/addemp.css";
 
 const AddEmployee = (props) => {
   const [employee, setEmp] = useState({});
+  const [user, setUser] = useState({});
   const [alert, setAlert] = useState();
+  const [alert1, setAlert1] = useState();
   const addemp = () => {
     console.log(employee);
+    console.log(user);
     setAlert(<Spinner animation="border" variant="success" />);
+    setAlert1(<Spinner animation="border" variant="info" />);
+
     axios
       .post("http://localhost:8080/lms/admin/employee", employee)
       .then((res) => {
@@ -17,15 +22,23 @@ const AddEmployee = (props) => {
         console.log(res.data);
         if (res.data.error) {
           setAlert(<Alert variant="danger">unable to add employee</Alert>);
-          window.scrollTo({ top: 0, behavior: "smooth" });
         } else {
           setAlert(
             <Alert variant="success">Employee added successfully</Alert>
           );
           document.empform.reset();
-          window.scrollTo({ top: 0, behavior: "smooth" });
         }
       });
+    axios.post(`http://localhost:8080/lms/user/register`, user).then((res) => {
+      console.log(res.data.response);
+      if (res.data.error) {
+        setAlert1(<Alert variant="danger">Unable to register user</Alert>);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } else {
+        setAlert1(<Alert variant="success">Registration successfull</Alert>);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    });
   };
 
   return (
@@ -70,6 +83,9 @@ const AddEmployee = (props) => {
               const val = e.target.value;
               setEmp((prevState) => {
                 return { ...prevState, email: val };
+              });
+              setUser((prevState) => {
+                return { ...prevState, userEmail: val };
               });
             }}
           ></Form.Control>
@@ -131,6 +147,65 @@ const AddEmployee = (props) => {
             </option>
           </Form.Control>
         </Form.Group>
+        <hr></hr>
+        <h2>
+          <strong>Registration Details</strong>
+        </h2>
+        <hr></hr>
+        {alert1}
+        <Form.Group>
+          <Form.Row>
+            <Col>
+              <Form.Label>UserName</Form.Label>
+              <Form.Control
+                type="text"
+                onChange={(e) => {
+                  const val = e.target.value;
+                  setUser((prevState) => {
+                    return { ...prevState, userName: val };
+                  });
+                }}
+              ></Form.Control>
+            </Col>
+            <Col>
+              <Form.Label>Role Id</Form.Label>
+              <Form.Control
+                as="select"
+                onChange={(e) => {
+                  const val = e.target.value;
+                  setUser((prevState) => {
+                    return { ...prevState, roleId: val };
+                  });
+                }}
+              >
+                <option disabled>---select---</option>
+                <option value="1">1 (Admin)</option>
+                <option value="2">2 (Employee)</option>
+              </Form.Control>
+            </Col>
+          </Form.Row>
+        </Form.Group>
+        <Form.Group>
+          <Form.Row>
+            <Col>
+              <Form.Label>Password</Form.Label>
+              <Form.Control
+                type="password"
+                onChange={(e) => {
+                  const val = e.target.value;
+                  setUser((prevState) => {
+                    return { ...prevState, password: val };
+                  });
+                }}
+              ></Form.Control>
+            </Col>
+            <Col>
+              <Form.Label>Repeat Password</Form.Label>
+              <Form.Control type="password"></Form.Control>
+            </Col>
+          </Form.Row>
+        </Form.Group>
+
         <Button variant="success" className="offset-md-5" onClick={addemp}>
           <strong>Add Employee</strong>
         </Button>

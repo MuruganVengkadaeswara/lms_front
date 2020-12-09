@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, Alert } from "react-bootstrap";
 import usericon from "./icons/user.svg";
 import passicon from "./icons/password.svg";
 import "./login.css";
@@ -17,6 +17,8 @@ function Login(props) {
     password: "",
   });
 
+  const [alert, setAlert] = useState();
+
   const getcreds = () => {
     console.log(creds);
     axios.post("http://localhost:8080/lms/user/login", creds).then((res) => {
@@ -26,23 +28,33 @@ function Login(props) {
         localStorage.setItem("user", JSON.stringify(res.data.response));
         switch (res.data.response.roleId) {
           case 1:
-            props.history.push("/admin");
+            // props.history.push("/admin");
+            window.location.href = "http://localhost:3000/admin";
             break;
           case 2:
-            props.history.push("/employee");
+            // props.history.push("/employee");
+            window.location.href = "http://localhost:3000/employee";
             break;
           case 3:
-            props.history.push("/client");
+            // props.history.push("/client");
+            window.location.href = "http://localhost:3000/client";
             break;
           default:
             props.history.push("/Login");
         }
+      } else {
+        setAlert(
+          <Alert animation="border" variant="danger">
+            Invalid Credentials
+          </Alert>
+        );
       }
     });
   };
 
   return (
     <div className="card card-body col-md-4 offset-md-4  loginbody">
+    {alert}
       <Form>
         <Form.Group controlId="formBasicEmail">
           <Form.Label>

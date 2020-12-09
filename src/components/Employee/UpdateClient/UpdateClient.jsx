@@ -19,6 +19,15 @@ const UpdateClient = (props) => {
     );
   };
 
+
+  const forward = ()=>{
+      console.log(clientId);
+      props.history.push({
+          pathname : '/employee/updateclient/client',
+          id:clientId
+      })
+  }
+
   return (
     <div className="updateblock">
       <div className="col-md-4 offset-md-4 card card-body mt-5 queryblock">
@@ -32,12 +41,12 @@ const UpdateClient = (props) => {
               }}
             ></Form.Control>
           </Form.Group>
-          <Button onClick={getclient} className="offset-md-5" variant="success">
+          <Button onClick={forward} className="offset-md-5" variant="success">
             Find
           </Button>
         </Form>
       </div>
-      <div className="card card-body col-md-5 offset-md-2">
+      {/* <div className="card card-body col-md-8 offset-md-2">
         <Form>
           {Object.keys(client).map((key, index) => (
             <h2>
@@ -46,7 +55,7 @@ const UpdateClient = (props) => {
            
           ))}
         </Form>
-      </div>
+      </div> */}
     </div>
   );
 };

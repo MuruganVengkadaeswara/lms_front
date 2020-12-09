@@ -1,3 +1,7 @@
-.regblock{
+.block{
     font-family: 'Courier New', Courier, monospace;
+}
+
+.chartblock{
+    display: flex;
 }
