@@ -8,7 +8,9 @@ const ApprovedApplications = (props) => {
     Axios.get(`http://localhost:8080/lms/employee/applications-approved`).then(
       (res) => {
         console.log(res.data);
-        setApplns(res.data.response);
+        if (!res.data.error) {
+          setApplns(res.data.response);
+        }
       }
     );
   }, []);
@@ -26,7 +28,6 @@ const ApprovedApplications = (props) => {
             <th>Approved On</th>
             <th>Approver Id</th>
             <th>statusId</th>
-            <th>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -42,15 +43,10 @@ const ApprovedApplications = (props) => {
                 <td>
                   {date.toLocaleDateString()} {date.getHours()}:
                   {date.getMinutes()}:{date.getSeconds()}{" "}
-                  {(date.getHours() >=12 ) ? "PM" : "AM"}
+                  {date.getHours() >= 12 ? "PM" : "AM"}
                 </td>
                 <td>{appln.status.approverId}</td>
                 <td>{appln.status.statusId}</td>
-                <td>
-                  <Button>
-                    <strong>View</strong>
-                  </Button>
-                </td>
               </tr>
             );
           })}

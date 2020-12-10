@@ -19,11 +19,10 @@ const UpdateRole = (props) => {
     });
   }, [],[roles]);
 
-  const edit = (e) => {
-    let txt = document.getElementById(`${e.target.id}_rd`).innerText;
-    let id = e.target.id;
+  const edit = (id) => {
+    let txt = document.getElementById(`${id}_rd`).innerText;
     document.getElementById(
-      `${e.target.id}_rd`
+      `${id}_rd`
     ).innerHTML = ReactDOMServer.renderToString(
       <Form.Control
         id={`${id}_in`}
@@ -33,9 +32,8 @@ const UpdateRole = (props) => {
     );
   };
 
-  const update = (e) => {
+  const update = (id) => {
     let obj;
-    let id = e.target.id;
     if (document.getElementById(`${id}_in`) != null) {
       setAlert(<Spinner animation="border" variant="success" />);
       console.log(document.getElementById(`${id}_in`).value);
@@ -55,6 +53,7 @@ const UpdateRole = (props) => {
         }
         else{
           setAlert(<Alert variant="success">Role updated successfully</Alert>)
+          window.location.reload()
         }
       })
     }
@@ -82,12 +81,12 @@ const UpdateRole = (props) => {
               <td id={`${role.roleId}_rd`}>{role.roleDescription}</td>
               <td>
                 <span>
-                  <Button id={role.roleId} onClick={edit} variant="danger">
+                  <Button id={role.roleId} onClick={()=>edit(role.roleId)} variant="danger">
                     Edit
                   </Button>
                   <Button
                     id={role.roleId}
-                    onClick={update}
+                    onClick={()=>update(role.roleId)}
                     variant="info"
                     className="ml-5"
                   >

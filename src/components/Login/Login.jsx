@@ -19,7 +19,8 @@ function Login(props) {
 
   const [alert, setAlert] = useState();
 
-  const getcreds = () => {
+  const getcreds = (e) => {
+    e.preventDefault();
     console.log(creds);
     axios.post("http://localhost:8080/lms/user/login", creds).then((res) => {
       console.log(res);
@@ -54,8 +55,12 @@ function Login(props) {
 
   return (
     <div className="card card-body col-md-4 offset-md-4  loginbody">
-    {alert}
-      <Form>
+      <h2 className='offset-4'>
+        <strong>Welcome</strong>
+      </h2>
+      <hr></hr>
+      {alert}
+      <Form onSubmit={getcreds}>
         <Form.Group controlId="formBasicEmail">
           <Form.Label>
             <span>
@@ -94,13 +99,19 @@ function Login(props) {
             }}
           />
         </Form.Group>
-        {/* <NavLink to="/admin"> */}
+        <small>
+          <strong>
+            <NavLink to="/forgotPassword">Forgot Password?</NavLink>
+          </strong>
+        </small>
+
         <Button onClick={getcreds} variant="success" className="offset-5">
           <strong>Login</strong>
         </Button>
-        {/* </NavLink> */}
       </Form>
-      <NavLink to="/register">New User? Register Here</NavLink>
+      <NavLink to="/register" className="offset-5">
+        <strong>New User? Register Here</strong>
+      </NavLink>
     </div>
   );
 }

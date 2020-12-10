@@ -8,12 +8,13 @@ const AddClient = (props) => {
   const [client, setClient] = useState({});
   const [alert, setAlert] = useState();
 
-  let addclient = () => {
+  const addclient = (e) => {
+    e.preventDefault();
     setAlert(<Spinner animation="border" variant="success" />);
     console.log("client");
     console.log(client);
     axios
-      .post("http://localhost:8080/lms/employee/manage-clients", client)
+      .post("http://localhost:8080/lms/employee/client", client)
       .then((res) => {
         console.log(res.data.response);
         if (res.data.error) {
@@ -29,7 +30,7 @@ const AddClient = (props) => {
 
   return (
     <div className="col-md-6 offset-md-3 card card-body mt-5 cliform">
-      <Form name="clientinfo">
+      <Form name="clientinfo" onSubmit={addclient}>
         <div>{alert}</div>
         <h1>
           <strong>Client Information</strong>
@@ -145,7 +146,6 @@ const AddClient = (props) => {
               <Form.Label>State</Form.Label>
               <Form.Control
                 as="select"
-                defaultChecked="---Select---"
                 onChange={(e) => {
                   const val = e.target.value;
                   setClient((prevState) => {
@@ -193,7 +193,7 @@ const AddClient = (props) => {
           <Form.Label>Client Status</Form.Label>
           <Form.Control
             as="select"
-            defaultChecked="Select"
+            defaultValue="select"
             onChange={(e) => {
               const val = e.target.value;
               setClient((prevState) => {
@@ -201,16 +201,17 @@ const AddClient = (props) => {
               });
             }}
           >
-            <option disabled key="select">
+            <option disabled value="select">
               Select
             </option>
-            <option key="act">ACTIVE</option>
-            <option key="inact">INACTIVE</option>
+            <option key="act" value="active">ACTIVE</option>
+            <option key="inact" value="inactive">INACTIVE</option>
           </Form.Control>
         </Form.Group>
         <Button
           variant="success"
           className="col-md-4 offset-md-4"
+          type="submit"
           onClick={addclient}
         >
           <strong>Add</strong>

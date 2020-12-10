@@ -23,6 +23,8 @@ import NotLoggedIn from "../NotLoggedIn/NotLoggedIn";
 import ClientDashBoard from "../ClientDashBoard/ClientDashBoard";
 import AdminContents from "../AdminDashboard/AdminContents/AdminContents";
 import CheckStatus from "../CheckStatus/CheckStatus";
+import ForgotPassword from "../ForgotPassword/ForgotPassword";
+import ChangePassword from "../ForgotPassword/ChangePassword";
 
 const Home = (props) => {
   const [appl, setAppl] = useState(1);
@@ -107,8 +109,8 @@ const Home = (props) => {
             name: "My Loans",
           },
           {
-            url: "/client/pendingemis",
-            name: "Pending Emis",
+            url: "/client/payments",
+            name: "My Payments",
           },
           {
             url: "/client/apply",
@@ -138,6 +140,8 @@ const Home = (props) => {
         <Route path="/pleaselogin" component={NotLoggedIn}></Route>
         <Route path="/client" component={ClientDashBoard}></Route>
         <Route path="/applicationstatus" component={CheckStatus}></Route>
+        <Route path="/forgotpassword" component={ForgotPassword}></Route>
+        <Route path="/forgotpassword/change" component={ChangePassword}></Route>
 
         {/* </Switch> */}
       </Router>

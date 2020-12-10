@@ -17,10 +17,10 @@ const ApplicationsPending = (props) => {
       });
   }, []);
 
-  const showAppln = (e)=>{
-    console.log(e.target.id);
+  const showAppln = (id)=>{
+    console.log(id);
     // props.history.push('./pendLoans/application')
-    props.history.push({pathname:"./application",id:e.target.id})
+    props.history.push({pathname:"./application",id:id})
     // setapp(<ApplicationFull id={e.target.id}/>)
   }
 
@@ -44,7 +44,7 @@ const ApplicationsPending = (props) => {
               <td>{appln.lastName}</td>
               <td>{appln.loanAmount}</td>
               <td>
-                  <Button id={appln.applicationId} onClick={showAppln}>
+                  <Button id={appln.applicationId} onClick={()=>showAppln(appln.applicationId)}>
                       View
                   </Button>
               </td>

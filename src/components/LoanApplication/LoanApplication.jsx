@@ -17,8 +17,15 @@ import "../LoanApplication/loanapplication.css";
 
 const LoanApplication = (props) => {
   const [typelist, setTypelist] = useState([]);
-  const [appln, setAppln] = useState({ status: {status:"pndg"} });
+  const [appln, setAppln] = useState({ status: { status: "pndg" } });
   const [alert, setAlert] = useState();
+
+  const validateApplication = (app) => {
+    const onlyNumbers = /^[0-9]+$/;
+    const rePan = /[A-Z]{5}[0-9]{4}[A-Z]{1}/;
+    console.log(onlyNumbers.test(app.loanAmount));
+    console.log(rePan.test(app.panNo));
+  };
 
   useEffect(() => {
     axios.get("http://localhost:8080/lms/user/loantypes").then((res) => {
@@ -28,9 +35,11 @@ const LoanApplication = (props) => {
     });
   }, []);
 
-  const apply = () => {
+  const apply = (e) => {
+    e.preventDefault();
     setAlert(<Spinner animation="border" variant="success" />);
     console.log(appln);
+    validateApplication(appln);
     axios.post("http://localhost:8080/lms/user/apply", appln).then((res) => {
       console.log(res);
       console.log(res.data);
@@ -56,7 +65,7 @@ const LoanApplication = (props) => {
   return (
     <div className="card card-body  offset-md-2 col-md-8 mt-5  appblock">
       <div>{alert}</div>
-      <Form name="loanapplication">
+      <Form name="loanapplication" onSubmit={apply}>
         <h1>Loan Details</h1>
         <hr />
         <Form.Group as={Row}>
@@ -81,6 +90,7 @@ const LoanApplication = (props) => {
           <Col>
             <Form.Label>Loan Amount</Form.Label>
             <Form.Control
+              required
               onChange={(e) => {
                 const val = e.target.value;
                 setAppln((prevState) => {
@@ -99,6 +109,7 @@ const LoanApplication = (props) => {
             <Col>
               <Form.Label>First Name</Form.Label>
               <Form.Control
+                required
                 type="text"
                 onChange={(e) => {
                   const val = e.target.value;
@@ -412,7 +423,12 @@ const LoanApplication = (props) => {
             }}
           ></Form.Control>
         </FormGroup>
-        <Button variant="success" className="offset-md-5" onClick={apply}>
+        <Button
+          type="submit"
+          variant="success"
+          className="offset-md-5"
+          onClick={apply}
+        >
           Apply
         </Button>
       </Form>

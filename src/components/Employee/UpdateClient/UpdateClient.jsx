@@ -5,33 +5,20 @@ import "../UpdateClient/updatecli.css";
 
 const UpdateClient = (props) => {
   const [clientId, setClientId] = useState();
-  const [client, setClient] = useState({});
 
-  const getclient = () => {
+  const forward = (e) => {
+    e.preventDefault();
     console.log(clientId);
-    Axios.get(`http://localhost:8080/lms/employee/client/${clientId}`).then(
-      (res) => {
-        console.log(res);
-        let cli = res.data.response;
-        setClient(cli);
-        console.log(client);
-      }
-    );
+    props.history.push({
+      pathname: "/employee/updateclient/client",
+      id: clientId,
+    });
   };
-
-
-  const forward = ()=>{
-      console.log(clientId);
-      props.history.push({
-          pathname : '/employee/updateclient/client',
-          id:clientId
-      })
-  }
 
   return (
     <div className="updateblock">
       <div className="col-md-4 offset-md-4 card card-body mt-5 queryblock">
-        <Form>
+        <Form onSubmit={forward}>
           <Form.Group>
             <Form.Label>Client Id</Form.Label>
             <Form.Control
@@ -41,21 +28,16 @@ const UpdateClient = (props) => {
               }}
             ></Form.Control>
           </Form.Group>
-          <Button onClick={forward} className="offset-md-5" variant="success">
+          <Button
+            type="submit"
+            onClick={forward}
+            className="offset-md-5"
+            variant="success"
+          >
             Find
           </Button>
         </Form>
       </div>
-      {/* <div className="card card-body col-md-8 offset-md-2">
-        <Form>
-          {Object.keys(client).map((key, index) => (
-            <h2>
-                {key} : {client[key]}
-            </h2>
-           
-          ))}
-        </Form>
-      </div> */}
     </div>
   );
 };

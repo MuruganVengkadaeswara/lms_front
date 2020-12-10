@@ -16,6 +16,7 @@ import icon from "../AdminDashboard/admin.svg";
 import AdminContents from "./AdminContents/AdminContents";
 import EmployeeFull from "../EmployeeFull/EmployeeFull";
 import EditEmployee from "../EmployeeFull/EditEmployee/EditEmployee";
+import EmployeesFull from "../EmployeeFull/EmployeesFull";
 
 const AdminDashboard = (props) => {
   const [user, setUser] = useState(localStorage.getItem("user"));

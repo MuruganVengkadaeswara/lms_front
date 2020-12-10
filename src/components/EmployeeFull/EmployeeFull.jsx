@@ -7,48 +7,49 @@ const EmployeeFull = (props) => {
   const [emps, setEmps] = useState([]);
   const [alert, setAlert] = useState();
 
-  useEffect(() => {
-    console.log(props.location.id);
+  const fetchAllEmployee = () => {
     Axios.get(
       `http://localhost:8080/lms/admin/employee/${props.location.id}`
     ).then((res) => {
-      let arr = res.data.response
+      let arr = res.data.response;
       setEmps(arr);
       console.log(emps);
     });
-  },[]);
-
-  useEffect(()=>{
-
-  },[alert])
-
-  const deleteEmp = (e) => {
-    console.log(e.target.value);
-    let id = parseInt(e.target.value)
-    setAlert(<Spinner variant="danger" animation="border"/>)
-    Axios.delete(`http://localhost:8080/lms/admin/employee/${id}`).
-    then((res)=>{
-      console.log(res.data);
-      if(res.data.error){
-        setAlert(<Alert variant="danger">Unable to delete Employee</Alert>)
-      }
-      else{
-        setAlert(<Alert variant="success">Employee Deleted Successfully</Alert>)
-      }
-    })
   };
 
-  const updateEmp = (e) => {
-    console.log(e.target.id);
+  useEffect(() => {
+    console.log(props.location.id);
+    fetchAllEmployee();
+  }, []);
+
+  const deleteEmp = (id) => {
+    console.log(id);
+    setAlert(<Spinner variant="danger" animation="border" />);
+    Axios.delete(`http://localhost:8080/lms/admin/employee/${id}`).then(
+      (res) => {
+        console.log(res.data);
+        if (res.data.error) {
+          setAlert(<Alert variant="danger">Unable to delete Employee</Alert>);
+        } else {
+          setAlert(
+            <Alert variant="success">Employee Deleted Successfully</Alert>
+          );
+        }
+      }
+    );
+  };
+
+  const updateEmp = (id) => {
+    console.log(id);
     props.history.push({
-      pathname:"/admin/employees/editEmployee",
-      id:e.target.id
-    })
+      pathname: "/admin/employees/editEmployee",
+      id: id,
+    });
   };
 
   return (
     <div className="col-md-8 offset-md-2 card card-body mt-5 empsblock">
-    {alert}
+      {alert}
       <h3>
         <strong>Search Results:</strong>
       </h3>
@@ -77,16 +78,15 @@ const EmployeeFull = (props) => {
                     <Button
                       variant="info"
                       id={emp.employeeId}
-                      onClick={updateEmp}
+                      onClick={() => updateEmp(emp.employeeId)}
                     >
                       <strong>update</strong>
                     </Button>
                     <Button
                       variant="danger"
                       className="ml-4"
-                      value={emp.employeeId}
-                      // id={emp.employeeId}
-                      onClick={deleteEmp}
+                      id={emp.employeeId}
+                      onClick={() => deleteEmp(emp.employeeId)}
                     >
                       <strong>Delete</strong>
                     </Button>

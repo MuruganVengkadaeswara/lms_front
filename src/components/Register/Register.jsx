@@ -10,29 +10,69 @@ const Register = (props) => {
 
   const [alert, setAlert] = useState();
 
+  const validateUser = (u) => {
+    const reEmail = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const rePass = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
+    if (reEmail.test(u.userEmail) && rePass.test(u.password)) {
+      return "OK";
+    } else if (reEmail.test(u.userEmail)) {
+      return "invalid password";
+    } else if (reEmail.test(u.password)) {
+      return "invalid email";
+    } else {
+      return "invalid";
+    }
+  };
+
   const regUser = (event) => {
     setAlert(<Spinner animation="border" variant="success" />);
     event.preventDefault();
     console.log(user);
-    axios.post("http://localhost:8080/lms/user/register", user).then((res) => {
-      console.log(res);
-      console.log(res.data);
-      if (res.data.error) {
+    console.log(validateUser(user));
+    validateUser(user);
+    switch (validateUser(user)) {
+      case "OK":
+        axios
+          .post("http://localhost:8080/lms/user/register", user)
+          .then((res) => {
+            console.log(res);
+            console.log(res.data);
+            if (res.data.error) {
+              setAlert(
+                <Alert variant="danger">
+                  Unable to register Please Try Later
+                </Alert>
+              );
+            } else {
+              setAlert(
+                <Alert variant="success">
+                  <span>
+                    Registration Successfull you can
+                    <NavLink href="/login">login</NavLink> here
+                  </span>
+                </Alert>
+              );
+              document.regform.reset();
+            }
+          });
+        break;
+      case "invalid email":
+        setAlert(<Alert variant="danger">Please Enter a valid Email</Alert>);
+        break;
+      case "invalid password":
+        setAlert(<Alert variant="danger">Please Enter a valid password</Alert>);
+        break;
+      case "invalid":
         setAlert(
-          <Alert variant="danger">Unable to register Please Try Later</Alert>
-        );
-      } else {
-        setAlert(
-          <Alert variant="success">
-            <span>
-              Registration Successfull you can
-              <NavLink href="/login">login</NavLink> here
-            </span>
+          <Alert variant="danger">
+            Please Enter a valid password and Email
           </Alert>
         );
-        document.regform.reset();
-      }
-    });
+        break;
+      default:
+        setAlert(<Alert variant="info">unknown error</Alert>);
+        break;
+    }
   };
 
   return (
@@ -50,13 +90,13 @@ const Register = (props) => {
           <Form.Control
             type="email"
             placeholder="Enter email"
-            required
             onChange={(e) => {
               const val = e.target.value;
               setUser((prevState) => {
                 return { ...prevState, userEmail: val };
               });
             }}
+            required
           />
         </Form.Group>
 
@@ -93,7 +133,12 @@ const Register = (props) => {
           <Form.Control type="password" placeholder="Password" />
         </Form.Group>
 
-        <Button variant="success" onClick={regUser} className="offset-5">
+        <Button
+          variant="success"
+          type="submit"
+          onClick={regUser}
+          className="offset-5"
+        >
           <strong>Register</strong>
         </Button>
       </Form>
