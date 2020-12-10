@@ -11,8 +11,9 @@ const EmployeeFull = (props) => {
     Axios.get(
       `http://localhost:8080/lms/admin/employee/${props.location.id}`
     ).then((res) => {
-      let arr = res.data.response;
-      setEmps(arr);
+      if (!res.data.error) {
+        setEmps(res.data.response);
+      }
       console.log(emps);
     });
   };

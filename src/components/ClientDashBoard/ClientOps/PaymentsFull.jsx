@@ -15,12 +15,13 @@ const PaymentsFull = (props) => {
   }, [props.location.id]);
 
   return (
-    <div className="col-md-6 offset-md-3 card card-body mt-5" style={{fontFamily:'courier new'}}>
-    <h2>
-        <strong>
-            Payment Details:
-        </strong>
-    </h2>
+    <div
+      className="col-md-6 offset-md-3 card card-body mt-5"
+      style={{ fontFamily: "courier new" }}
+    >
+      <h2>
+        <strong>Payment Details:</strong>
+      </h2>
       <Table striped hover bordered bordered>
         <thead>
           <th>Payment Id</th>

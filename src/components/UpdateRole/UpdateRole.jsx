@@ -8,16 +8,21 @@ import ReactDOMServer from "react-dom/server";
 const UpdateRole = (props) => {
   const [roles, setRoles] = useState([]);
   const [alert, setAlert] = useState();
-  const [uprole,setuprole] = useState({})
+  const [uprole, setuprole] = useState({});
 
-  useEffect(() => {
-    axios.get("http://localhost:8080/lms/admin/roles").then((res) => {
-      console.log(res.data);
-      let arr = res.data.response;
-      setRoles(arr);
-      console.log(roles);
-    });
-  }, [],[roles]);
+  useEffect(
+    () => {
+      axios.get("http://localhost:8080/lms/admin/roles").then((res) => {
+        console.log(res.data);
+        if (!res.data.error) {
+          setRoles(res.data.response);
+        }
+        console.log(roles);
+      });
+    },
+    [],
+    [roles]
+  );
 
   const edit = (id) => {
     let txt = document.getElementById(`${id}_rd`).innerText;
@@ -45,17 +50,19 @@ const UpdateRole = (props) => {
       console.log(obj);
       setuprole(obj);
       console.log(uprole);
-      axios.put('http://localhost:8080/lms/admin/manage-roles',obj)
-      .then((res)=>{
-        console.log(res.data);
-        if(res.data.error){
-          setAlert(<Alert variant="danger">Unable to update Role</Alert>)
-        }
-        else{
-          setAlert(<Alert variant="success">Role updated successfully</Alert>)
-          window.location.reload()
-        }
-      })
+      axios
+        .put("http://localhost:8080/lms/admin/manage-roles", obj)
+        .then((res) => {
+          console.log(res.data);
+          if (res.data.error) {
+            setAlert(<Alert variant="danger">Unable to update Role</Alert>);
+          } else {
+            setAlert(
+              <Alert variant="success">Role updated successfully</Alert>
+            );
+            window.location.reload();
+          }
+        });
     }
   };
 
@@ -81,12 +88,16 @@ const UpdateRole = (props) => {
               <td id={`${role.roleId}_rd`}>{role.roleDescription}</td>
               <td>
                 <span>
-                  <Button id={role.roleId} onClick={()=>edit(role.roleId)} variant="danger">
+                  <Button
+                    id={role.roleId}
+                    onClick={() => edit(role.roleId)}
+                    variant="danger"
+                  >
                     Edit
                   </Button>
                   <Button
                     id={role.roleId}
-                    onClick={()=>update(role.roleId)}
+                    onClick={() => update(role.roleId)}
                     variant="info"
                     className="ml-5"
                   >

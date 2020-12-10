@@ -19,7 +19,10 @@ const MyPayments = (props) => {
   const fetchAllLoans = (id) => {
     Axios.get(`http://localhost:8080/lms/client/loans/${id}`).then((res) => {
       console.log(res.data);
-      setLoans(res.data.response);
+      if (!res.data.error) {
+        setLoans(res.data.response);
+      }
+
       console.log(loans);
     });
   };
@@ -30,41 +33,56 @@ const MyPayments = (props) => {
       id: id,
     });
   };
-
-  return (
-    <div
-      className="col-md-6 offset-md-3 card card-body mt-5"
-      style={{ fontFamily: "courier new" }}
-    >
-      <Table striped bordered hover responsive>
-        <thead>
-          <th>Loan Id</th>
-          <th>Loan Name</th>
-          <th>Action</th>
-        </thead>
-        <tbody>
-          {loans.map((loan) => {
-            return (
-              <tr>
-                <td>{loan.loanId}</td>
-                <td>{loan.loantype.loanName}</td>
-                <td>
-                  <Button
-                    variant="info"
-                    onClick={() => {
-                      goView(loan.loanId);
-                    }}
-                  >
-                    View Payments
-                  </Button>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </Table>
-    </div>
-  );
+  if (loans.length > 0) {
+    return (
+      <div
+        className="col-md-6 offset-md-3 card card-body mt-5"
+        style={{ fontFamily: "courier new" }}
+      >
+        <Table striped bordered hover responsive>
+          <thead>
+            <th>Loan Id</th>
+            <th>Loan Name</th>
+            <th>Action</th>
+          </thead>
+          <tbody>
+            {loans.map((loan) => {
+              return (
+                <tr>
+                  <td>{loan.loanId}</td>
+                  <td>{loan.loantype.loanName}</td>
+                  <td>
+                    <Button
+                      variant="info"
+                      onClick={() => {
+                        goView(loan.loanId);
+                      }}
+                    >
+                      View Payments
+                    </Button>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </Table>
+      </div>
+    );
+  } else {
+    return (
+      <div
+        className="col-md-6 offset-md-3 mt-5"
+        style={{ fontFamily: "courier new", textAlign: "center" }}
+      >
+        <h1>You Have No loans</h1>
+        <h2>
+          <a href="/apply">
+            <u>apply here</u>
+          </a>
+        </h2>
+      </div>
+    );
+  }
 };
 
 export default MyPayments;

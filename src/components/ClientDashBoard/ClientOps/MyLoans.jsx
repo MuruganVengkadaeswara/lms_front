@@ -1,6 +1,6 @@
 import Axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Button, Table } from "react-bootstrap";
+import { Button, NavLink, Table } from "react-bootstrap";
 
 const MyLoans = (props) => {
   const [client, setClient] = useState({});
@@ -21,8 +21,9 @@ const MyLoans = (props) => {
   const fetchAllLoans = (id) => {
     Axios.get(`http://localhost:8080/lms/client/loans/${id}`).then((res) => {
       console.log(res.data);
-      setLoans(res.data.response);
-      console.log(loans);
+      if (!res.data.error) {
+        setLoans(res.data.response);
+      }
     });
   };
 
@@ -33,47 +34,69 @@ const MyLoans = (props) => {
     });
   };
 
-  return (
-    <div
-      className="col-md-8  offset-md-2 card card-body mt-5"
-      style={{ fontFamily: "courier new" }}
-    >
-      <h2>
-        <strong>Your Loans :</strong>
-      </h2>
-      <hr></hr>
-      <Table bordered striped hover responsive>
-        <thead>
-          <th>LoanId</th>
-          <th>Loan Type</th>
-          <th>Loan Amount</th>
-          <th>Pending Emis</th>
-          <th>Emi Amount</th>
-          <th>Emi Duration</th>
-          <th>Pay Emi</th>
-        </thead>
-        <tbody>
-          {loans.map((loan) => {
-            return (
-              <tr>
-                <td>{loan.loanId}</td>
-                <td>{loan.loantype.loanName}</td>
-                <td>{loan.loanAmount}</td>
-                <td>{loan.pendingEmis}</td>
-                <td>{loan.emiAmount} / mo</td>
-                <td>{loan.emiDuration}</td>
-                <td>
-                  <Button variant="success" onClick={() => gopay(loan.loanId)}>
-                    PayEmi
-                  </Button>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </Table>
-    </div>
-  );
+  let ele;
+
+  if (loans.length > 0) {
+    return (
+      <div
+        className="col-md-8  offset-md-2 card card-body mt-5"
+        style={{ fontFamily: "courier new" }}
+      >
+        <h2>
+          <strong>Your Loans :</strong>
+        </h2>
+        <hr></hr>
+        <Table bordered striped hover responsive id="tableblock">
+          <thead>
+            <th>LoanId</th>
+            <th>Loan Type</th>
+            <th>Loan Amount</th>
+            <th>Pending Emis</th>
+            <th>Emi Amount</th>
+            <th>Emi Duration</th>
+            <th>Pay Emi</th>
+          </thead>
+          <tbody>
+            {loans.map((loan) => {
+              return (
+                <tr>
+                  <td>{loan.loanId}</td>
+                  <td>{loan.loantype.loanName}</td>
+                  <td>{loan.loanAmount}</td>
+                  <td>{loan.pendingEmis}</td>
+                  <td>{loan.emiAmount} / mo</td>
+                  <td>{loan.emiDuration}</td>
+                  <td>
+                    <Button
+                      variant="success"
+                      onClick={() => gopay(loan.loanId)}
+                    >
+                      PayEmi
+                    </Button>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </Table>
+        {ele}
+      </div>
+    );
+  } else {
+    return (
+      <div
+        className="col-md-6 offset-md-3 mt-5"
+        style={{ fontFamily: "courier new", textAlign: "center" }}
+      >
+        <h1>You Have No loans</h1>
+        <h2>
+          <a href="/apply">
+            <u>apply here</u>
+          </a>
+        </h2>
+      </div>
+    );
+  }
 };
 
 export default MyLoans;
