@@ -7,7 +7,8 @@ const CheckStatus = (props) => {
   const [status, setstatus] = useState({});
   const [alert, setAlert] = useState();
 
-  const getstatus = () => {
+  const getstatus = (e) => {
+    e.preventDefault();
     setAlert(<Spinner animation="border" variant="success" />);
     console.log(id);
     Axios.get(`http://localhost:8080/lms/user/applicationstatus/${id}`).then(
@@ -32,7 +33,7 @@ const CheckStatus = (props) => {
         style={{ fontFamily: "courier new" }}
       >
         {alert}
-        <Form name="appform">
+        <Form name="appform" onSubmit={getstatus}>
           <Form.Group>
             <Form.Label>Application Id</Form.Label>
             <Form.Control
@@ -42,7 +43,7 @@ const CheckStatus = (props) => {
               }}
             ></Form.Control>
           </Form.Group>
-          <Button variant="success" onClick={getstatus} className="offset-md-5">
+          <Button variant="success" type='submit' onClick={getstatus} className="offset-md-5">
             Check
           </Button>
         </Form>
